@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 
 const SignIn = () => {
@@ -18,7 +17,7 @@ const SignIn = () => {
               <h1 className="text-2xl font-bold">Sign in to your account</h1>
               <div>
                 <span className="text-gray-600 text-sm">
-                  Don't have an account?
+                  Dont have an account?
                 </span>
                 <span className="text-gray-700 text-sm font-semibold">
                   <Link to="/register">Register Now</Link>
