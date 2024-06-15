@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 const AdminLogin = () => {
   return (
     <>
-      <div className="bg-gradient-to-r from-green-300 via-blue-300 to-purple-300 min-h-screen min-h-screen flex items-center justify-center">
+      <div className="bg-gradient-to-r from-green-300 via-blue-300 to-purple-300 min-h-screen flex items-center justify-center">
         <div className="max-w-md w-full mx-auto p-8 bg-white rounded-lg shadow-xl">
           <h2 className="text-3xl font-semibold text-center text-gray-800 mb-6">Admin Login</h2>
           <form method="post" action="#" onSubmit={() => false}>

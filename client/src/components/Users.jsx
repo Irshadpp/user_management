@@ -17,7 +17,7 @@ const Users = () => {
   );
 
   return (
-    <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-green-300 via-blue-300 to-purple-300 min-h-screen">
+    <div className=" flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-green-300 via-blue-300 to-purple-300 min-h-screen">
       <div className="max-w-4xl w-full bg-white p-8 rounded-lg shadow-lg">
         <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">User Management</h2>
         <div className="mb-4">
@@ -53,7 +53,7 @@ const Users = () => {
                   </select>
                 </td>
                 <td className="py-2 px-4 flex items-center space-x-2">
-                    <Link to="/edit_user">
+                    <Link to="/admin/edit_user">
                   <button className="flex items-center justify-center p-2 bg-blue-500 hover:bg-blue-600 text-white rounded shadow-lg focus:outline-none">
                     <FaEdit />
                   </button>

@@ -152,7 +152,7 @@ const Register = () => {
         <span className="text-gray-600 text-sm">
           Already have an account?
         </span>
-        <span className="text-gray-700 text-sm text-blue-700 font-semibold">
+        <span className=" text-sm text-blue-700 font-semibold">
           <Link to="/">SignIn</Link>
         </span>
       </div>
