@@ -6,8 +6,8 @@ const logger = require('morgan');
 const cors = require('cors');
 const mongoose = require('mongoose')
 
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
+const userRouter = require('./routes/user');
+const adminRouter = require('./routes/admin');
 
 const app = express();
 
@@ -35,8 +35,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/api', indexRouter);
-app.use('/users', usersRouter);
+app.use('/api', userRouter);
+app.use('/api/admin', adminRouter);
 
 mongoose.connect('mongodb://localhost/ums', {
   useNewUrlParser: true,

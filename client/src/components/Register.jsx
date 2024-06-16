@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { validateRegister } from "../utils/validation";
+import axios from "axios";
 
 const Register = () => {
-
   const [fName, setfName] = useState()
   const [lName, setlName] = useState()
   const [email, setEmail] = useState()
@@ -11,8 +11,19 @@ const Register = () => {
   const [cPassword, setcPassword] = useState()
   const [errors, setErrors] = useState();
 
-  const handleSubmit = () =>{
-     setErrors(validateRegister(fName,lName,email,password,cPassword));
+  const handleSubmit = async () =>{
+    try {
+      setErrors(validateRegister(fName,lName,email,password,cPassword));
+      const response = await axios.post('http://localhost:3000/api/register',{
+        fName,
+        lName,
+        email,
+        password
+      })
+      console.log(response.data);
+    } catch (error) {
+      console.log(error)
+    } 
   }
   
   return (
