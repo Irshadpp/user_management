@@ -3,8 +3,8 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const cors = require('cors')
-
+const cors = require('cors');
+const mongoose = require('mongoose')
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
@@ -23,6 +23,11 @@ const corsOptions = {
   optionsSuccessStatus: 204
 };
 
+app.use((req, res, next) => {
+  res.set('Cache-Control', 'no-store'); // Disables caching
+  next();
+})
+
 app.use(cors(corsOptions));
 app.use(logger('dev'));
 app.use(express.json());
@@ -33,12 +38,21 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api', indexRouter);
 app.use('/users', usersRouter);
 
-// catch 404 and forward to error handler
+mongoose.connect('mongodb://localhost/ums', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => {
+  console.log('Connected to MongoDB');
+})
+.catch((error) => {
+  console.error('Error connecting to MongoDB:', error);
+});
+
 app.use(function(req, res, next) {
   next(createError(404));
 });
 
-// error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
