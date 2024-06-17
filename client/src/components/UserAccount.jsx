@@ -1,7 +1,30 @@
+import axios from "axios";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const UserAccount = () => {
-  // Dummy data (replace with actual data later)
+
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  const handlePhotoChange = async (e) =>{
+    const file = e.target.files[0];
+    setSelectedFile(file)
+
+    try {
+      const formData = new FormData();
+      formData.append('photo', file)
+      const response = await axios.post('http://localhost:3000/api/upload-photo', formData, {
+        headers:{
+          'Content-Type' : 'multipart/form-data'
+        }
+      });
+      console.log('upload successfull', response.data)
+    } catch (error) {
+      console.log(error);
+    }
+
+  }
+  
   const user = {
     fullName: "John Doe",
     email: "john.doe@example.com",
@@ -18,7 +41,7 @@ const UserAccount = () => {
           type="file"
           id="upload-photo"
           className="hidden"
-          // onChange={handlePhotoChange}
+          onChange={handlePhotoChange}
         />
         <img
           className="h-32 w-32 rounded-full object-cover cursor-pointer"

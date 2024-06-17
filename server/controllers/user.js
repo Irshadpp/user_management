@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const User = require('../model/userdb');
+const path = require('path')
 const {validationResult} = require('express-validator');
 
 const register = async (req, res) =>{
@@ -47,8 +48,24 @@ const login = async (req,res) =>{
     }
 }
 
+const uploadPhoto = async (req, res) =>{
+    try {
+        if(!req.file){
+            return res.status(400).json({message:"No file uploaded"});
+        }
+        const filePath = path.join('./images', req.file.filename);
+
+
+        res.status(200).json({message:"File uploaded successfully", filePath: filePath})
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message:"Internal server error"})
+    }
+}
+
 
 module.exports = {
     register,
-    login
+    login,
+    uploadPhoto
 }
