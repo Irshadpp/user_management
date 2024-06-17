@@ -1,14 +1,16 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {ToastContainer,toast} from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 
 const SignIn = () => {
 
+  const navigate = useNavigate();
   const location = useLocation();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+  const [errMsg, setErrMsg] = useState();
 
   useEffect(()=>{
     if(location.state?.message){
@@ -17,10 +19,17 @@ const SignIn = () => {
   },[location.state]);
 
   const handleSubmit = async () =>{
+    console.log("fasdjklf")
     try {
-      const response = await axios.post('https://localhost:3000/api/login');
-
+      const response = await axios.post('http://localhost:3000/api/login',{
+        email,
+        password
+      });
+      navigate('/home', {state:{message:response?.data?.message}});
     } catch (error) {
+      if(error.response){
+        setErrMsg(error?.response?.data?.message || 'Login faild')
+      }
       console.log(error);
     }
   }
@@ -38,7 +47,7 @@ const SignIn = () => {
             />
           </div>
           <div className="w-full xl:w-1/2 p-8">
-            <form onSubmit={() => false}>
+            <form>
               <h1 className="text-2xl font-bold">Sign in to your account</h1>
               <div>
                 <span className="text-gray-600 text-sm">
@@ -48,6 +57,13 @@ const SignIn = () => {
                   <Link to="/register">Register Now</Link>
                 </span>
               </div>
+              {errMsg && (
+              <div>
+                <span className="text-red-500 text-sm">
+                  {errMsg}
+                </span>
+              </div>
+              )}
               <div className="mb-4 mt-6">
                 <label
                   className="block text-gray-700 text-sm font-semibold mb-2"
@@ -71,7 +87,7 @@ const SignIn = () => {
                   Password
                 </label>
                 <input
-                onChange={()=>setPassword(e.target.value)}
+                onChange={(e)=>setPassword(e.target.value)}
                   className="text-sm bg-gray-200 appearance-none rounded w-full py-2 px-3 text-gray-700 mb-1 leading-tight focus:outline-none focus:shadow-outline h-10"
                   id="password"
                   type="password"
@@ -86,6 +102,7 @@ const SignIn = () => {
               </div>
               <div className="flex w-full mt-8">
                 <button
+                onClick={() => handleSubmit()}
                   className="w-full bg-gray-800 hover:bg-gray-900 text-white text-sm py-2 px-4 font-semibold rounded focus:outline-none focus:shadow-outline h-10"
                   type="button"
                 >
