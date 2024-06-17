@@ -25,7 +25,7 @@ const Register = () => {
         password
       });
       setSuccessMsg(response.data.message);
-      navigate('/');
+      navigate('/', {state:{message:"Successfully registered"}});
     } catch (error) {
       if(error.response){
         console.log(error?.response)
