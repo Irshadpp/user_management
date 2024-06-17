@@ -1,15 +1,19 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { validateRegister } from "../utils/validation";
 import axios from "axios";
 
+
 const Register = () => {
+  const navigate = useNavigate();
   const [fName, setfName] = useState()
   const [lName, setlName] = useState()
   const [email, setEmail] = useState()
   const [password, setPassword] = useState()
   const [cPassword, setcPassword] = useState()
   const [errors, setErrors] = useState();
+  const [errMsg, setErrMsg] = useState();
+  const [successMsg, setSuccessMsg] = useState()
 
   const handleSubmit = async () =>{
     try {
@@ -19,10 +23,16 @@ const Register = () => {
         lName,
         email,
         password
-      })
-      console.log(response.data);
+      });
+      setSuccessMsg(response.data.message);
+      navigate('/');
     } catch (error) {
-      console.log(error)
+      if(error.response){
+        console.log(error?.response)
+        setErrMsg(error?.response?.data?.message|| 'Registration faild')
+      }else{
+        setErrMsg('An error occured')
+      }
     } 
   }
   
@@ -45,6 +55,7 @@ const Register = () => {
                 <div className="text-center mb-10">
                   <h1 className="font-bold text-3xl text-gray-900">REGISTER</h1>
                   <p>Enter your information to register</p>
+                  {errMsg && <p className="text-red-500 mt-2">{errMsg}</p> }
                 </div>
                 <div>
                   <div className="flex -mx-3">
