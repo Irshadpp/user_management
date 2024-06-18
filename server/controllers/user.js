@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 const User = require('../model/userdb');
 const path = require('path')
 const {validationResult} = require('express-validator');
+const jwt = require('jsonwebtoken');
 
 const register = async (req, res) =>{
     try {
@@ -34,15 +35,18 @@ const register = async (req, res) =>{
 const login = async (req,res) =>{
     try {
         const {email, password} = req.body;
-        const checkEmail = await User.findOne({email});
-        if(!checkEmail){
+        const user = await User.findOne({email});
+        if(!user){
             return res.status(400).json({message:"Invalid email or password!"});
         }
-        const checkPassword = await bcrypt.compare(password, checkEmail.password);
+        const checkPassword = await bcrypt.compare(password, user.password);
         if(!checkPassword){
             return res.status(400).json({message:"Invalid email or password!"});
         }
-        return res.status(200).json({message:"Login successfull"});
+        console.log(user)
+        const token = jwt.sign({userId: user._id}, process.env.JWT_SECRET, {expiresIn: '1h'});
+
+        return res.status(200).json({message:"Login successfull", token, user});
     } catch (error) {
         console.log(error)
     }

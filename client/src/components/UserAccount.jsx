@@ -1,9 +1,15 @@
 import axios from "axios";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { ToastContainer,toast } from 'react-toastify';
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css'; 
+import { useDispatch } from "react-redux";
+import { removeUser } from "../utils/userSlice";
 
 const UserAccount = () => {
 
+  const dispatch = useDispatch();
   const [selectedFile, setSelectedFile] = useState(null);
 
   const handlePhotoChange = async (e) =>{
@@ -18,11 +24,45 @@ const UserAccount = () => {
           'Content-Type' : 'multipart/form-data'
         }
       });
-      console.log('upload successfull', response.data)
+      console.log('upload successfull', response.data);
+      selectedFile(response.data.filePath);
+      if(response.data?.message){
+        toast.success(response.data.message);
+      }
     } catch (error) {
       console.log(error);
     }
 
+  }
+
+  const handleLogout = () =>{
+    confirmAlert({
+      customUI: ({ onClose }) => (
+        <div className="fixed inset-0 flex items-center justify-center bg-opacity-50 bg-gray-900">
+          <div className="bg-white rounded-lg p-8 max-w-md w-full">
+            <h1 className="text-xl font-semibold mb-4">Are you sure?</h1>
+            <p className="text-gray-700 mb-4">Are you sure you want to logout this account?</p>
+            <div className="flex justify-end">
+              <button
+                className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded mr-2"
+                onClick={() => {
+                  dispatch(removeUser());
+                  onClose();
+                }}
+              >
+                Yes
+              </button>
+              <button
+                className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded"
+                onClick={onClose}
+              >
+                No
+              </button>
+            </div>
+          </div>
+        </div>
+      ),
+    });
   }
   
   const user = {
@@ -33,6 +73,7 @@ const UserAccount = () => {
 
   return (
     <div className="bg-gradient-to-r from-indigo-400 via-purple-500 to-pink-500 min-h-screen flex items-center justify-center">
+      <ToastContainer/>
       <div className="max-w-lg mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
         <div className="px-10 py-12">
         <div className="flex items-center justify-center">
@@ -60,7 +101,9 @@ const UserAccount = () => {
               Edit Profile
             </button>
             </Link>
-            <button className="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400">
+            <button
+            onClick={handleLogout}
+            className="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400">
               Logout
             </button>
           </div>

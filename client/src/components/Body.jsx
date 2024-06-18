@@ -11,17 +11,7 @@ const Body = () => {
       toast.success(location.state.message);
     }
   },[]);
-  const fetchData = async () =>{
-    try {
-      const response = await axios.get('http://localhost:3000/api/users');
-      console.log(response.data);
-    } catch (error) {
-      console.log(error)
-    } 
-  }
-  useEffect(()=>{
-  fetchData();
-})
+  
 
   return (
     <div className="bg-gradient-to-r from-indigo-400 via-purple-500 to-pink-500 min-h-screen flex items-center justify-center">

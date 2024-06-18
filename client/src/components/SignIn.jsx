@@ -1,11 +1,14 @@
 import axios from 'axios';
+import {useDispatch, useSelector} from 'react-redux'
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {ToastContainer,toast} from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
+import { addUser } from '../utils/userSlice';
 
 const SignIn = () => {
-
+  const {token} = useSelector((state)=>state.user)
+  const  dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const [email, setEmail] = useState();
@@ -15,22 +18,30 @@ const SignIn = () => {
   useEffect(()=>{
     if(location.state?.message){
       toast.success(location.state.message);
-    }
+    }                               
+    console.log()
   },[location.state]);
 
+  useEffect(()=>{
+    if(token){
+      navigate('/home');
+    }
+  },[token, navigate])
+
   const handleSubmit = async () =>{
-    console.log("fasdjklf")
     try {
       const response = await axios.post('http://localhost:3000/api/login',{
         email,
         password
       });
+      const {token, user} = response.data;
+      dispatch(addUser({user, token}));
       navigate('/home', {state:{message:response?.data?.message}});
     } catch (error) {
       if(error.response){
         setErrMsg(error?.response?.data?.message || 'Login faild')
       }
-      console.log(error);
+      console.log("=========================",error);
     }
   }
 
