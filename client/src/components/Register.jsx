@@ -17,7 +17,11 @@ const Register = () => {
 
   const handleSubmit = async () =>{
     try {
-      setErrors(validateRegister(fName,lName,email,password,cPassword));
+      const validationErrors = validateRegister(fName,lName,email,password,cPassword);
+      if(Object.keys(validationErrors).length>0){
+        return setErrors(validationErrors);
+      }
+     
       const response = await axios.post('http://localhost:3000/api/register',{
         fName,
         lName,

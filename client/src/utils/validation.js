@@ -31,3 +31,22 @@ export const validateRegister = (fName, lName, email, password, cPassword) => {
 
     return errors;
 }
+
+export const validateEditForm = (fName, lName, email) =>{
+    const errors = {};
+
+    if(!fName || fName.trim()===''){
+        errors.fName = 'First name is required';
+    }
+
+    if(!lName || lName.trim()===''){
+        errors.lName = 'Last name is required'
+    }
+
+    if (!email || email.trim() === '') {
+        errors.email = 'Email is required';
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+        errors.email = 'Email is invalid';
+    }
+    return errors;
+}

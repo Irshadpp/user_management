@@ -69,12 +69,26 @@ const uploadPhoto = async (req, res) =>{
     }
 }
 
-const updateUser = async () =>{
+const updateUser = async (req,res) =>{
     try {
+        const user_id = req.user.userId
         const {fName, lName, email} = req.body;
-        console.log(fName, lName);
+
+        const existingUser = await User.findOne({email});
+        if(existingUser){
+            return res.status(409).json({message: "Email already exists"});
+        }
+
+        const updatedUser = await User.findByIdAndUpdate(user_id, {
+            fName,
+            lName,
+            email
+        })
+
+        res.status(200).json({message:"Profile edited Successfully", user:updatedUser})
     } catch (error) {
-        
+        console.log(error)
+        res.status(500).json({message:"Internal server error"});
     }
 }
 
