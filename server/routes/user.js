@@ -10,5 +10,6 @@ router.get('/',);
 router.post('/register', validateRegistration, userController.register);
 router.post('/login', userController.login);
 router.post('/upload-photo', userAuth, upload.single('photo'), userController.uploadPhoto);
+router.put('/update_profile', userAuth, userController.updateUser)
 
 module.exports = router;

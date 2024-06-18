@@ -1,18 +1,32 @@
 import  { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import { API_URL } from '../utils/constants';
+import axios from 'axios';
 
 const ProfileEditor = () => {
-  const [firstName, setFirstName] = useState('John');
-  const [lastName, setLastName] = useState('Doe');
-  const [email, setEmail] = useState('john@example.com');
+  const navigate = useNavigate()
+  const {user, token} = useSelector((state)=>state.user)
+  const [fName, setfName] = useState(user.fName);
+  const [lName, setlName] = useState(user.lName);
+  const [email, setEmail] = useState(user.email);
 
-  const handleUpdate = () => {
-    // Handle update logic here
-    console.log('Profile updated:', { firstName, lastName, email });
+  const handleUpdate = async() => {
+    try {
+      const response = await axios.put(API_URL+'api/update_profile', fName, lName, email,{
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+      },
+      });
+      console.log('Profile updated:', { fName, lName, email });
+    } catch (error) {
+      console.log()
+    }
   };
 
   const handleGoBack = () => {
-    history.push('/users');
+    navigate('/account');
   };
 
   return (
@@ -24,8 +38,8 @@ const ProfileEditor = () => {
           <input
             type="text"
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
+            value={fName}
+            onChange={(e) => setfName(e.target.value)}
           />
         </div>
         <div className="mb-4">
@@ -33,8 +47,8 @@ const ProfileEditor = () => {
           <input
             type="text"
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
+            value={lName}
+            onChange={(e) => setlName(e.target.value)}
           />
         </div>
         <div className="mb-4">

@@ -1,31 +1,33 @@
-import axios from "axios";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ToastContainer,toast } from 'react-toastify';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css'; 
-import { useDispatch } from "react-redux";
-import { removeUser } from "../utils/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { removeUser, updateProfilePhoto } from "../utils/userSlice";
+import axios from "axios";
+import { API_URL, USER_IMG_URL } from "../utils/constants";
+// import axiosInstance from "../utils/axiosInstance";
 
 const UserAccount = () => {
-
   const dispatch = useDispatch();
+  const {user, token} = useSelector((state)=>state.user)
   const [selectedFile, setSelectedFile] = useState(null);
 
   const handlePhotoChange = async (e) =>{
     const file = e.target.files[0];
-    setSelectedFile(file)
+    setSelectedFile(file);
 
     try {
       const formData = new FormData();
       formData.append('photo', file)
       const response = await axios.post('http://localhost:3000/api/upload-photo', formData, {
-        headers:{
-          'Content-Type' : 'multipart/form-data'
-        }
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${token}`,
+      },
       });
-      console.log('upload successfull', response.data);
-      selectedFile(response.data.filePath);
+      dispatch(updateProfilePhoto(response.data.filePath));
       if(response.data?.message){
         toast.success(response.data.message);
       }
@@ -64,12 +66,6 @@ const UserAccount = () => {
       ),
     });
   }
-  
-  const user = {
-    fullName: "John Doe",
-    email: "john.doe@example.com",
-    profilePhoto: "https://randomuser.me/api/portraits/men/1.jpg" // Example profile photo URL
-  };
 
   return (
     <div className="bg-gradient-to-r from-indigo-400 via-purple-500 to-pink-500 min-h-screen flex items-center justify-center">
@@ -86,13 +82,14 @@ const UserAccount = () => {
         />
         <img
           className="h-32 w-32 rounded-full object-cover cursor-pointer"
-          src={user.profilePhoto}
+          src={ user.profilePhoto ? API_URL + user.profilePhoto : USER_IMG_URL }
           alt="Profile"
         />
+        {console.log(user.profilePhoto)}
       </label>
     </div>
           <div className="text-center mt-4">
-            <h2 className="text-3xl font-semibold text-gray-800">{user.fullName}</h2>
+            <h2 className="text-3xl font-semibold text-gray-800">{user.fName+ ' ' +user.lName}</h2>
             <p className="text-sm text-gray-600 mt-1">{user.email}</p>
           </div>
           <div className="mt-6">

@@ -58,8 +58,10 @@ const uploadPhoto = async (req, res) =>{
             return res.status(400).json({message:"No file uploaded"});
         }
         const filePath = path.join('./images', req.file.filename);
-
-
+        const user_id = req.user.userId;
+        const user = await User.findById(user_id);
+        user.profilePhoto = filePath;
+        await user.save();
         res.status(200).json({message:"File uploaded successfully", filePath: filePath})
     } catch (error) {
         console.log(error);
@@ -67,9 +69,19 @@ const uploadPhoto = async (req, res) =>{
     }
 }
 
+const updateUser = async () =>{
+    try {
+        const {fName, lName, email} = req.body;
+        console.log(fName, lName);
+    } catch (error) {
+        
+    }
+}
+
 
 module.exports = {
     register,
     login,
-    uploadPhoto
+    uploadPhoto,
+    updateUser
 }

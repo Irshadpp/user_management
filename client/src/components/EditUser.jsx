@@ -1,10 +1,14 @@
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 const EditUser = () => {
-  const [firstName, setFirstName] = useState('John');
-  const [lastName, setLastName] = useState('Doe');
-  const [email, setEmail] = useState('john@example.com');
+  const {user} = useSelector((state)=>state.user)
+  const [firstName, setFirstName] = useState(user.fName);
+  const [lastName, setLastName] = useState(user.lName);
+  const [email, setEmail] = useState(user.email);
+
+  console.log(user.fName);
 
   const handleUpdate = () => {
     console.log('User details updated:', { firstName, lastName, email });

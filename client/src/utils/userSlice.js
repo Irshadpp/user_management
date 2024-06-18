@@ -14,9 +14,12 @@ const userSlice = createSlice({
         removeUser: (state)=>{
             state.user = null;
             state.token = null;
+        },
+        updateProfilePhoto: (state, action) =>{
+            state.user.profilePhoto = action.payload;
         }
     }
 });
 
-export const {addUser,removeUser} = userSlice.actions;
+export const {addUser,removeUser,updateProfilePhoto} = userSlice.actions;
 export default userSlice.reducer;

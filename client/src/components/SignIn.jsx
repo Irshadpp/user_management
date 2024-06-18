@@ -41,7 +41,7 @@ const SignIn = () => {
       if(error.response){
         setErrMsg(error?.response?.data?.message || 'Login faild')
       }
-      console.log("=========================",error);
+      console.log(error);
     }
   }
 
