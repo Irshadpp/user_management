@@ -4,11 +4,13 @@ import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {ToastContainer,toast} from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
-import { addUser } from '../utils/userSlice';
+import { addUser, removeUser } from '../utils/userSlice';
 
 const SignIn = () => {
-  const {userToken} = useSelector((state)=>state.user)
   const  dispatch = useDispatch();
+  // dispatch(removeUser())
+  const {userToken} = useSelector((state)=>state.user)
+// const userToken = null;
   const navigate = useNavigate();
   const location = useLocation();
   const [email, setEmail] = useState();
@@ -22,6 +24,7 @@ const SignIn = () => {
     }                               
   },[location.state, navigate, location.pathname]);
 
+  
   useEffect(()=>{
     if(userToken){
       navigate('/home');

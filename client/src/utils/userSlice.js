@@ -5,11 +5,13 @@ const userSlice = createSlice({
     initialState: {
         user: null,
         userToken: null,
+        isAuthenticated: false
     },
     reducers: {
             addUser: (state, action) => {
                 state.user = action.payload.user;
                 state.userToken = action.payload.userToken;
+                state.isAuthenticated = true;
             },
             updateUser: (state, action) => {
                 state.user = action.payload;
@@ -17,6 +19,7 @@ const userSlice = createSlice({
             removeUser: (state) => {
                 state.user = null;
                 state.userToken = null;
+                state.isAuthenticated = false;
             },
             updateProfilePhoto: (state, action) => {
                 if (state.user) {

@@ -10,6 +10,7 @@ router.get('/',);
 router.post('/register', validateRegistration, userController.register);
 router.post('/login', userController.login);
 router.post('/upload-photo', userAuth, upload.single('photo'), userController.uploadPhoto);
-router.put('/update_profile', userAuth, userController.updateUser)
+router.put('/update_profile', userAuth, userController.updateUser);
+router.get('/verify-user',userAuth, userController.verifyUser);
 
 module.exports = router;

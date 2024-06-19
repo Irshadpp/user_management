@@ -1,9 +1,7 @@
-// src/Store/Store.js
 import { configureStore } from '@reduxjs/toolkit';
 import userReducer from '../utils/userSlice';
 import adminReducer from '../utils/adminSlice';
 
-// Load state from local storage
 const loadState = (key) => {
   try {
     const serializedState = localStorage.getItem(key);
@@ -17,7 +15,6 @@ const loadState = (key) => {
   }
 };
 
-// Save state to local storage
 const saveState = (key, state) => {
   try {
     const serializedState = JSON.stringify(state);

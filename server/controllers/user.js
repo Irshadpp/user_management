@@ -43,7 +43,6 @@ const login = async (req,res) =>{
         if(!checkPassword){
             return res.status(400).json({message:"Invalid email or password!"});
         }
-        console.log(user)
         const userToken = jwt.sign({userId: user._id}, process.env.JWT_SECRET, {expiresIn: '1h'});
 
         return res.status(200).json({message:"Login successfull", userToken, user});
@@ -93,10 +92,36 @@ const updateUser = async (req,res) =>{
     }
 }
 
+const verifyUser = async (req, res) => {
+    try {
+      const token = req.headers.authorization.split(' ')[1]; 
+      if (!token) {
+        return res.status(401).json({ isValid: false, message: "No token provided" });
+      }
+  
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const userId = decoded.userId;
+  
+      const user = await User.findById(userId);
+      if (!user) {
+        return res.status(404).json({ isValid: false, message: "User not found" });
+      }
+  
+      return res.status(200).json({ isValid: true, message: "User is valid" });
+  
+    } catch (error) {
+      console.error('Error verifying user:', error);
+      return res.status(500).json({ isValid: false, message: "Internal server error" });
+    }
+  };
+  
+
+  
 
 module.exports = {
     register,
     login,
     uploadPhoto,
-    updateUser
+    updateUser,
+    verifyUser,
 }
