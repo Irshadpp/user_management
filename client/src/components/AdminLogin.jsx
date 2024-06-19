@@ -1,24 +1,46 @@
+import axios from 'axios';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { API_URL } from '../utils/constants';
 
 const AdminLogin = () => {
+
+  const [email, setEmail] = useState()
+  const [password, setPassword] = useState()
+
+  const handleSubmit = async (e) =>{
+    e.preventDefault();
+    try {
+      const response = await axios.post(API_URL+'api/admin',email, password,{
+        Headers:{
+          'Content-Type':'application/json'
+        }
+      });
+      
+    } catch (error) {
+      console.log()
+    }
+  }
+
   return (
     <>
       <div className="bg-gradient-to-r from-green-300 via-blue-300 to-purple-300 min-h-screen flex items-center justify-center">
         <div className="max-w-md w-full mx-auto p-8 bg-white rounded-lg shadow-xl">
           <h2 className="text-3xl font-semibold text-center text-gray-800 mb-6">Admin Login</h2>
-          <form method="post" action="#" onSubmit={() => false}>
+          <form onSubmit={handleSubmit}>
             <div className="mb-4">
               <label
                 className="block text-gray-700 text-sm font-semibold mb-2"
                 htmlFor="username"
               >
-                Username
+                Email Address
               </label>
               <input
                 className="text-sm appearance-none rounded w-full py-2 px-3 text-gray-700 bg-gray-200 leading-tight focus:outline-none focus:shadow-outline h-10"
                 id="username"
                 type="text"
-                placeholder="Your username"
+                placeholder="Your email address"
+                onChange={(e)=>setEmail(e.target.value)}
               />
             </div>
             <div className="mb-6">
@@ -33,6 +55,7 @@ const AdminLogin = () => {
                 id="password"
                 type="password"
                 placeholder="Your password"
+                onChange={(e)=>setPassword(e.target.value)}
               />
             </div>
             <div className="flex justify-center">

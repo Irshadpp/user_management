@@ -7,26 +7,22 @@ const userSlice = createSlice({
         token: null,
     },
     reducers: {
-        addUser: (state, action) => ({
-            ...state,
-            user: action.payload.user,
-            token: action.payload.token,
-        }),
-        updateUser: (state, action) => ({
-            ...state,
-            user: action.payload,
-        }),
-        removeUser: () => ({
-            user: null,
-            token: null,
-        }),
-        updateProfilePhoto: (state, action) => ({
-            ...state,
-            user: {
-                ...state.user,
-                profilePhoto: action.payload,
+            addUser: (state, action) => {
+                state.user = action.payload.user;
+                state.token = action.payload.token;
+            },
+            updateUser: (state, action) => {
+                state.user = action.payload;
+            },
+            removeUser: (state) => {
+                state.user = null;
+                state.token = null;
+            },
+            updateProfilePhoto: (state, action) => {
+                if (state.user) {
+                    state.user.profilePhoto = action.payload;
+                }
             }
-        }),
     }
 });
 

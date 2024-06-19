@@ -18,9 +18,9 @@ const SignIn = () => {
   useEffect(()=>{
     if(location.state?.message){
       toast.success(location.state.message);
+      navigate(location.pathname, { replace: true });
     }                               
-    console.log()
-  },[location.state]);
+  },[location.state, navigate, location.pathname]);
 
   useEffect(()=>{
     if(token){

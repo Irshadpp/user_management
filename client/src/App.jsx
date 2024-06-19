@@ -9,9 +9,8 @@ import Dashboard from './pages/admin/Dashboard.jsx';
 import UsersList from './pages/admin/UsersList.jsx';
 import Edit from './pages/admin/Edit.jsx';
 import EditProfile from './pages/user/EditProfile.jsx';
-import appStore, {persistor} from './utils/appStore.js';
+import appStore from './utils/appStore.js';
 import { Provider } from 'react-redux';
-import { PersistGate } from 'redux-persist/integration/react';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 
 
@@ -58,10 +57,8 @@ function App() {
 
   return (
     <Provider store={appStore}>
-      <PersistGate loading={null} persistor={persistor}>
     <RouterProvider router={appRouter}>
     </RouterProvider>
-    </PersistGate>
     </Provider>
   )
 }

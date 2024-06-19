@@ -17,7 +17,9 @@ const [email, setEmail] = useState(user ? user.email : '');
   const [errors, setErrors] = useState();
 
   useEffect(() => {
-    console.log('User state on mount:', user);
+    setfName(user.fName);
+    setlName(user.lName);
+    setEmail(user.email);
 }, [user]);
 
   const handleUpdate = async() => {
@@ -31,10 +33,10 @@ const [email, setEmail] = useState(user ? user.email : '');
           'Authorization': `Bearer ${token}`
       },
       });
-      console.log(response.data.user)
+      console.log(response.data.user);
        dispatch(updateUser(response.data.user));
         if(response.data.message){
-          toast.success(response.data.message)
+          toast.success(response.data.message);
         }
      
     } catch (error) {
