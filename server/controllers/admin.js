@@ -19,9 +19,9 @@ const login = async (req, res)=>{
             return res.status(401).json({message:"Invalid email or password"});
         }
 
-        const token = jwt.sign({adminId:admin._id}, process.env.JWT_SECRET,{expiresIn:'1h'});
+        const adminToken = jwt.sign({adminId:admin._id}, process.env.JWT_SECRET,{expiresIn:'1h'});
         console.log(jwt, admin)
-        return res.status(200).json({message:"Login successfull", token, admin});
+        return res.status(200).json({message:"Login successfull", adminToken, admin});
         
     } catch (error) {
         console.log(error);
@@ -48,9 +48,34 @@ const deleteUser = async (req, res) =>{
     }
 }
 
+const editUser = async (req,res) =>{
+    try {
+        const {userId} = req.params
+        const {fName, lName, email} = req.body;
+        const existingUser = await User.findOne({email});
+        if(existingUser && userId != existingUser._id){
+            return res.status(409).json({message: "Email already exists"});
+        }
+
+            const updatedUser = await User.findByIdAndUpdate(userId, {
+                fName,
+                lName,
+                email
+            },
+            {new:true}
+        );
+
+        res.status(200).json({message:"Edited user Successfully", user:updatedUser})
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({message:"Internal server error"});
+    }
+}
+
 
 module.exports = {
     login,
     getUsers,
-    deleteUser
+    deleteUser,
+    editUser
 }

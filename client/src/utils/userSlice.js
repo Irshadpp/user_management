@@ -4,19 +4,19 @@ const userSlice = createSlice({
     name: 'user',
     initialState: {
         user: null,
-        token: null,
+        userToken: null,
     },
     reducers: {
             addUser: (state, action) => {
                 state.user = action.payload.user;
-                state.token = action.payload.token;
+                state.userToken = action.payload.userToken;
             },
             updateUser: (state, action) => {
                 state.user = action.payload;
             },
             removeUser: (state) => {
                 state.user = null;
-                state.token = null;
+                state.userToken = null;
             },
             updateProfilePhoto: (state, action) => {
                 if (state.user) {

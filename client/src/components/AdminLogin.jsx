@@ -12,13 +12,13 @@ const AdminLogin = () => {
   const [email, setEmail] = useState()
   const [password, setPassword] = useState();
   const [errMsg, setErrMsg] = useState();
-  const {token} = useSelector((state)=>state.admin)
+  const {adminToken} = useSelector((state)=>state.admin)
 
   useEffect(()=>{
-    if(token){
+    if(adminToken){
       navigate('/admin/dashboard');
     }
-  },[token, navigate])
+  },[adminToken, navigate])
 
   const handleSubmit = async (e) =>{
     e.preventDefault();
@@ -28,9 +28,9 @@ const AdminLogin = () => {
         email,
         password
       });
-      const {admin, token} = response.data;
-      console.log(admin, token)
-      dispatch(addAdmin({admin, token}));
+      const {admin, adminToken} = response.data;
+      console.log(admin, adminToken)
+      dispatch(addAdmin({admin, adminToken}));
       navigate('/admin/dashboard');
     } catch (error) {
       if(error.response){

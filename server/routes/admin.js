@@ -9,6 +9,7 @@ router.get('/', function(req, res, next) {
 
 router.post('/', adminController.login);
 router.get('/users', adminAuth, adminController.getUsers);
-router.delete('/delete_user/:userId', adminAuth, adminController.deleteUser)
+router.delete('/delete_user/:userId', adminAuth, adminController.deleteUser);
+router.put('/edit_user/:userId', adminAuth, adminController.editUser);
 
 module.exports = router;

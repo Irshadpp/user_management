@@ -7,7 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { addUser } from '../utils/userSlice';
 
 const SignIn = () => {
-  const {token} = useSelector((state)=>state.user)
+  const {userToken} = useSelector((state)=>state.user)
   const  dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
@@ -23,10 +23,10 @@ const SignIn = () => {
   },[location.state, navigate, location.pathname]);
 
   useEffect(()=>{
-    if(token){
+    if(userToken){
       navigate('/home');
     }
-  },[token, navigate])
+  },[userToken, navigate])
 
   const handleSubmit = async () =>{
     try {
@@ -34,8 +34,8 @@ const SignIn = () => {
         email,
         password
       });
-      const {token, user} = response.data;
-      dispatch(addUser({user, token}));
+      const {userToken, user} = response.data;
+      dispatch(addUser({user, userToken}));
       navigate('/home', {state:{message:response?.data?.message}});
     } catch (error) {
       if(error.response){

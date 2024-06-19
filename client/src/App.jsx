@@ -28,7 +28,7 @@ function App() {
           <Route path="/admin/dashboard" element={<ProtectedAdmin><Dashboard /></ProtectedAdmin>} />
           <Route path="/admin/users" element={<ProtectedAdmin><UsersList /></ProtectedAdmin>} />
           <Route path="/admin/create_user" element={<ProtectedAdmin><SignUp title={'Create User'}/></ProtectedAdmin>}/>
-          <Route path="/admin/edit_user" element={<ProtectedAdmin><Edit /></ProtectedAdmin>} />
+          <Route path="/admin/edit_user/:userId" element={<ProtectedAdmin><Edit /></ProtectedAdmin>} />
         </Routes>
       </Router>
     </Provider>

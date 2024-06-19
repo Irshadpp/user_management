@@ -10,7 +10,7 @@ import { ToastContainer,toast } from 'react-toastify';
 const ProfileEditor = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const {user, token} = useSelector((state)=>state.user)
+  const {user, userToken} = useSelector((state)=>state.user)
   const [fName, setfName] = useState(user ? user.fName : '');
 const [lName, setlName] = useState(user ? user.lName : '');
 const [email, setEmail] = useState(user ? user.email : '');
@@ -30,7 +30,7 @@ const [email, setEmail] = useState(user ? user.email : '');
       }
       const response = await axios.put(API_URL+'api/update_profile', {fName, lName, email},{
         headers: { 
-          'Authorization': `Bearer ${token}`
+          'Authorization': `Bearer ${userToken}`
       },
       });
       console.log(response.data.user);

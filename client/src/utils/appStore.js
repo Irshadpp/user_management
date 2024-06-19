@@ -3,56 +3,32 @@ import { configureStore } from '@reduxjs/toolkit';
 import userReducer from '../utils/userSlice';
 import adminReducer from '../utils/adminSlice';
 
-// Load user state from local storage
-const loadUserState = () => {
+// Load state from local storage
+const loadState = (key) => {
   try {
-    const serializedState = localStorage.getItem('userState');
+    const serializedState = localStorage.getItem(key);
     if (serializedState === null) {
       return undefined;
     }
     return JSON.parse(serializedState);
   } catch (err) {
-    console.error("Could not load user state", err);
+    console.error(`Could not load ${key} state`, err);
     return undefined;
   }
 };
 
-// Save user state to local storage
-const saveUserState = (state) => {
+// Save state to local storage
+const saveState = (key, state) => {
   try {
     const serializedState = JSON.stringify(state);
-    localStorage.setItem('userState', serializedState);
+    localStorage.setItem(key, serializedState);
   } catch (err) {
-    console.error("Could not save user state", err);
+    console.error(`Could not save ${key} state`, err);
   }
 };
 
-// Load admin state from local storage
-const loadAdminState = () => {
-  try {
-    const serializedState = localStorage.getItem('adminState');
-    if (serializedState === null) {
-      return undefined;
-    }
-    return JSON.parse(serializedState);
-  } catch (err) {
-    console.error("Could not load admin state", err);
-    return undefined;
-  }
-};
-
-// Save admin state to local storage
-const saveAdminState = (state) => {
-  try {
-    const serializedState = JSON.stringify(state);
-    localStorage.setItem('adminState', serializedState);
-  } catch (err) {
-    console.error("Could not save admin state", err);
-  }
-};
-
-const persistedUserState = loadUserState();
-const persistedAdminState = loadAdminState();
+const persistedUserState = loadState('userState');
+const persistedAdminState = loadState('adminState');
 
 const appStore = configureStore({
   reducer: {
@@ -66,8 +42,8 @@ const appStore = configureStore({
 });
 
 appStore.subscribe(() => {
-  saveUserState(appStore.getState().user);
-  saveAdminState(appStore.getState().admin);
+  saveState('userState', appStore.getState().user);
+  saveState('adminState', appStore.getState().admin);
 });
 
 export default appStore;

@@ -8,12 +8,13 @@ const adminSlice = createSlice({
     },
     reducers:{
         addAdmin: (state, action) =>{
+            console.log("add admin called");
             state.admin = action.payload.admin;
-            state.token = action.payload.token;
+            state.adminToken = action.payload.adminToken;
         },
         removeAdmin: (state) =>{
             state.admin = null;
-            state.token = null;
+            state.adminToken = null;
         }
     }
 });

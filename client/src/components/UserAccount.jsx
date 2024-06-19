@@ -11,7 +11,7 @@ import { API_URL, USER_IMG_URL } from "../utils/constants";
 
 const UserAccount = () => {
   const dispatch = useDispatch();
-  const {user, token} = useSelector((state)=>state.user)
+  const {user, userToken} = useSelector((state)=>state.user)
   const [selectedFile, setSelectedFile] = useState(null);
 
   const handlePhotoChange = async (e) =>{
@@ -24,7 +24,7 @@ const UserAccount = () => {
       const response = await axios.post('http://localhost:3000/api/upload-photo', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          'Authorization': `Bearer ${token}`,
+          'Authorization': `Bearer ${userToken}`,
       },
       });
       dispatch(updateProfilePhoto(response.data.filePath));

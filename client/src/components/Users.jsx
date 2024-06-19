@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { FaEdit, FaTrash, FaUserPlus } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { API_URL } from '../utils/constants';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
@@ -9,8 +9,9 @@ import appStore from '../utils/appStore';
 
 
 const Users = () => {
+  const navigate = useNavigate()
   const [searchTerm, setSearchTerm] = useState('');
-  const {token} = useSelector((state)=>state.admin)
+  const {adminToken} = useSelector((state)=>state.admin)
   const [users, setUsers] = useState();
 
   useEffect(() => {
@@ -22,7 +23,7 @@ const Users = () => {
         try {
           const response = await axios.get(API_URL+'api/admin/users',{
             headers: {
-              'Authorization': `Bearer ${token}`
+              'Authorization': `Bearer ${adminToken}`
             }
           });
           setUsers(response.data.users);
@@ -50,7 +51,7 @@ const Users = () => {
         try {
           const response = await axios.delete(API_URL+`api/admin/delete_user/${userId}`,{
             headers:{
-              'Authorization':`Bearer ${token}`
+              'Authorization':`Bearer ${adminToken}`
             }
         })
           setUsers(response.data.users);
@@ -68,6 +69,10 @@ const Users = () => {
           });
         }
       }
+    }
+
+    const handleEditUser = (user) =>{
+      navigate(`/admin/edit_user/${user._id}`,{state:{user}});
     }
   
     if(!users) return <h1>Loading....</h1>
@@ -116,15 +121,12 @@ const Users = () => {
                   <td className="px-6 py-4 whitespace-nowrap">{user.email}</td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center space-x-3">
-                      <Link to={{
-                         pathname: '/admin/edit_user',
-                         state: { user }
-                      }}>
-                        <button className="flex items-center justify-center px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded-lg focus:outline-none">
+                        <button className="flex items-center justify-center px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded-lg focus:outline-none"
+                        onClick={()=>handleEditUser(user)}
+                        >
                           <FaEdit className="mr-1" />
                           Edit
                         </button>
-                      </Link>
                       <button className="flex items-center justify-center px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded-lg focus:outline-none"
                       onClick={()=>handleDeleteUser(user._id)}
                       >
