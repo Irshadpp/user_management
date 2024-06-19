@@ -12,7 +12,7 @@ const Users = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const {token} = useSelector((state)=>state.admin)
   const [users, setUsers] = useState();
-  
+
   useEffect(() => {
     console.log("Initial Redux state:", appStore.getState());
   }, []);
@@ -71,12 +71,13 @@ const Users = () => {
     }
   
     if(!users) return <h1>Loading....</h1>
+    
+    const  filteredUsers = users.filter(user =>
+    user.lName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    user.email.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
-  // const filteredUsers = users.filter(user =>
-  //   user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  //   user.email.toLowerCase().includes(searchTerm.toLowerCase())
-  // );
-
+ 
   return (
     <div className="flex items-center justify-center py-8 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-green-300 via-blue-300 to-purple-300 min-h-screen">
     <div className="max-w-4xl w-full bg-white rounded-lg shadow-lg overflow-hidden">
@@ -109,7 +110,7 @@ const Users = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              {users.map((user) => (
+              {filteredUsers.map((user) => (
                 <tr key={user._id}>
                   <td className="px-6 py-4 whitespace-nowrap">{user.fName} {user.lName}</td>
                   <td className="px-6 py-4 whitespace-nowrap">{user.email}</td>
