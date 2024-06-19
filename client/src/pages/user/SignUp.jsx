@@ -1,9 +1,9 @@
 import Register from '../../components/Register';
 
-const SignUp = () => {
+const SignUp = ({title}) => {
   return (
     <div>
-      <Register/>
+      <Register title={title}/>
     </div>
   )
 }

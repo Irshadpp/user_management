@@ -2,9 +2,10 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { validateRegister } from "../utils/validation";
 import axios from "axios";
+import { ToastContainer,toast } from "react-toastify";
 
-
-const Register = () => {
+const Register = ({title}) => {
+  console.log('-----------------',title)
   const navigate = useNavigate();
   const [fName, setfName] = useState()
   const [lName, setlName] = useState()
@@ -28,8 +29,12 @@ const Register = () => {
         email,
         password
       });
-      setSuccessMsg(response.data.message);
-      navigate('/', {state:{message:"Successfully registered"}});
+      if(title){
+        toast.success("Created user successfully");
+      }else{
+        setSuccessMsg(response.data.message);
+        navigate('/', {state:{message:"Successfully registered"}});
+      }
     } catch (error) {
       if(error.response){
         console.log(error?.response)
@@ -50,6 +55,7 @@ const Register = () => {
         </style>
   
         <div className="min-w-screen min-h-screen bg-gray-900 flex items-center justify-center px-5 py-5">
+          { title && <ToastContainer/>}
           <div className="bg-gray-100 text-gray-500 rounded-3xl shadow-xl w-full overflow-hidden" style={{ maxWidth: '1000px' }}>
             <div className="md:flex w-full">
               <div className="hidden md:block w-1/2 bg-indigo-500 py-10 px-10">
@@ -57,8 +63,22 @@ const Register = () => {
               </div>
               <div className="w-full md:w-1/2 py-10 px-5 md:px-10">
                 <div className="text-center mb-10">
-                  <h1 className="font-bold text-3xl text-gray-900">REGISTER</h1>
-                  <p>Enter your information to register</p>
+                  {
+                    title ? (
+                      <>
+                      <h1 className="font-bold text-3xl text-gray-900">{title}</h1>
+                      <p>Enter user information to create user</p>
+                      </>
+                    )
+                    :
+                    (
+                      <>
+                      <h1 className="font-bold text-3xl text-gray-900">REGISTER</h1>
+                      <p>Enter your information to register</p>
+                      </>
+                    )
+
+                  }
                   {errMsg && <p className="text-red-500 mt-2">{errMsg}</p> }
                 </div>
                 <div>
@@ -170,18 +190,29 @@ const Register = () => {
                       <button className="block w-full max-w-xs mx-auto bg-indigo-500 hover:bg-indigo-700 focus:bg-indigo-700 text-white rounded-lg px-3 py-3 font-semibold"
                       onClick={handleSubmit}
                       >
-                        REGISTER NOW
+                        {
+                          title ? 'CREATE USER' : "REGISTER NOW"
+                        }
+                        
                       </button>
                     </div>
                   </div>
+          {
+              title ? (
+                ""
+              ) : (
+                <>
                   <div>
-        <span className="text-gray-600 text-sm">
-          Already have an account?
-        </span>
-        <span className=" text-sm text-blue-700 font-semibold">
-          <Link to="/">SignIn</Link>
-        </span>
-      </div>
+                    <span className="text-gray-600 text-sm">
+                      Already have an account?
+                    </span>
+                    <span className="text-sm text-blue-700 font-semibold">
+                      <Link to="/">SignIn</Link>
+                    </span>
+                  </div>
+                </>
+              )
+          }
                 </div>
               </div>
             </div>

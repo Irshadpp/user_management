@@ -5,11 +5,18 @@ import { API_URL } from '../utils/constants';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import Swal from 'sweetalert2'
+import appStore from '../utils/appStore';
+
 
 const Users = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const {token} = useSelector((state)=>state.admin)
   const [users, setUsers] = useState();
+  
+  useEffect(() => {
+    console.log("Initial Redux state:", appStore.getState());
+  }, []);
+  
 
   const fetchData = async() =>{
         try {
