@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 
 const adminSlice = createSlice({
+    name:'admin',
     initialState:{
         admin: null
     },
@@ -18,5 +19,5 @@ const adminSlice = createSlice({
 });
 
 
-export const {addAdmin, removeAdmin} = adminSlice.reducer;
+export const {addAdmin, removeAdmin} = adminSlice.actions;
 export default adminSlice.reducer;

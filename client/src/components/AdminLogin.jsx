@@ -1,24 +1,44 @@
 import axios from 'axios';
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { API_URL } from '../utils/constants';
+import { useDispatch, useSelector } from 'react-redux';
+import { addAdmin } from '../utils/adminSlice';
 
 const AdminLogin = () => {
 
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [email, setEmail] = useState()
-  const [password, setPassword] = useState()
+  const [password, setPassword] = useState();
+  const [errMsg, setErrMsg] = useState();
+  const {token} = useSelector((state)=>state.admin)
+
+  useEffect(()=>{
+    if(token){
+      navigate('/admin/dashboard');
+    }
+  },[token, navigate])
 
   const handleSubmit = async (e) =>{
     e.preventDefault();
+    console.log(email)
     try {
-      const response = await axios.post(API_URL+'api/admin',email, password,{
-        Headers:{
-          'Content-Type':'application/json'
-        }
+      const response = await axios.post(API_URL+'api/admin',{
+        email,
+        password
       });
-      
+      const {admin, token} = response.data;
+      console.log(admin, token)
+      dispatch(addAdmin({admin, token}));
+      navigate('/admin/dashboard');
     } catch (error) {
-      console.log()
+      if(error.response){
+        setErrMsg(error.response.data.message || 'An error occured');
+      }else{
+        console.log(error)
+        setErrMsg('Login faild');
+      }
     }
   }
 
@@ -27,7 +47,7 @@ const AdminLogin = () => {
       <div className="bg-gradient-to-r from-green-300 via-blue-300 to-purple-300 min-h-screen flex items-center justify-center">
         <div className="max-w-md w-full mx-auto p-8 bg-white rounded-lg shadow-xl">
           <h2 className="text-3xl font-semibold text-center text-gray-800 mb-6">Admin Login</h2>
-          <form onSubmit={handleSubmit}>
+          <form>
             <div className="mb-4">
               <label
                 className="block text-gray-700 text-sm font-semibold mb-2"
@@ -58,10 +78,12 @@ const AdminLogin = () => {
                 onChange={(e)=>setPassword(e.target.value)}
               />
             </div>
+            {errMsg && <p className='text-red-500'>{errMsg}</p> }
             <div className="flex justify-center">
               <button
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm py-2 px-4 font-semibold rounded focus:outline-none focus:shadow-outline h-10"
                 type="button"
+                onClick={handleSubmit}
               >
                 Login
               </button>

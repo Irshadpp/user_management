@@ -1,6 +1,7 @@
 // src/Store/Store.js
 import { configureStore } from '@reduxjs/toolkit';
 import userReducer from '../utils/userSlice';
+import adminReducer from '../utils/adminSlice'
 
 // Load state from local storage
 const loadState = () => {
@@ -31,7 +32,7 @@ const persistedState = loadState();
 const appStore = configureStore({
   reducer: {
     user: userReducer,
-
+    admin: adminReducer,
   },
   preloadedState: persistedState
 });

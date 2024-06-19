@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const EditUser = () => {
-  const {user} = useSelector((state)=>state.user)
+  const location = useLocation();
+  console.log(location);
+  const {user} = location.state;
   const [firstName, setFirstName] = useState(user.fName);
   const [lastName, setLastName] = useState(user.lName);
   const [email, setEmail] = useState(user.email);

@@ -1,25 +1,88 @@
-import { useState } from 'react';
-import { FaEdit, FaTrash } from 'react-icons/fa';
+import { useEffect, useState } from 'react';
+import { FaEdit, FaTrash, FaUserPlus } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import { API_URL } from '../utils/constants';
+import axios from 'axios';
+import { useSelector } from 'react-redux';
+import Swal from 'sweetalert2'
 
 const Users = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const {token} = useSelector((state)=>state.admin)
+  const [users, setUsers] = useState();
 
-  const users = [
-    { id: 1, name: 'John Doe', email: 'john@example.com', role: 'admin' },
-    { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'user' },
-    // Add more users as needed
-  ];
+  const fetchData = async() =>{
+        try {
+          const response = await axios.get(API_URL+'api/admin/users',{
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          });
+          setUsers(response.data.users);
+        } catch (error) {
+          console.log(error);
+        }
+        } 
+  
+    useEffect(()=>{
+        fetchData()
+    },[]);
 
-  const filteredUsers = users.filter(user =>
-    user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    user.email.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+    const handleDeleteUser = async (userId) =>{
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!"
+      });
+    
+      if (result.isConfirmed) {
+        try {
+          const response = await axios.delete(API_URL+`api/admin/delete_user/${userId}`,{
+            headers:{
+              'Authorization':`Bearer ${token}`
+            }
+        })
+          setUsers(response.data.users);
+          await Swal.fire({
+            title: "Deleted!",
+            text: "Your file has been deleted.",
+            icon: "success"
+          });
+        } catch (error) {
+          console.error("Error deleting user:", error);
+          await Swal.fire({
+            title: "Error!",
+            text: "There was an error deleting the user.",
+            icon: "error"
+          });
+        }
+      }
+    }
+  
+    if(!users) return <h1>Loading....</h1>
+
+  // const filteredUsers = users.filter(user =>
+  //   user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  //   user.email.toLowerCase().includes(searchTerm.toLowerCase())
+  // );
 
   return (
-    <div className=" flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-green-300 via-blue-300 to-purple-300 min-h-screen">
-      <div className="max-w-4xl w-full bg-white p-8 rounded-lg shadow-lg">
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">User Management</h2>
+    <div className="flex items-center justify-center py-8 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-green-300 via-blue-300 to-purple-300 min-h-screen">
+    <div className="max-w-4xl w-full bg-white rounded-lg shadow-lg overflow-hidden">
+      <div className="flex items-center justify-between bg-gray-200 px-6 py-4">
+        <h2 className="text-2xl font-bold text-gray-800">User Management</h2>
+        <Link to="/admin/create_user">
+          <button className="flex items-center px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg focus:outline-none">
+            <FaUserPlus className="mr-2" />
+            Create User
+          </button>
+        </Link>
+      </div>
+      <div className="p-6">
         <div className="mb-4">
           <input
             type="text"
@@ -29,45 +92,47 @@ const Users = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        <table className="min-w-full bg-white">
-          <thead>
-            <tr>
-              <th className="py-2 px-4 bg-gray-200 text-gray-800 font-semibold text-left">Name</th>
-              <th className="py-2 px-4 bg-gray-200 text-gray-800 font-semibold text-left">Email</th>
-              <th className="py-2 px-4 bg-gray-200 text-gray-800 font-semibold text-left">Role</th>
-              <th className="py-2 px-4 bg-gray-200 text-gray-800 font-semibold text-left">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredUsers.map((user) => (
-              <tr key={user.id} className="border-b">
-                <td className="py-2 px-4">{user.name}</td>
-                <td className="py-2 px-4">{user.email}</td>
-                <td className="py-2 px-4">
-                  <select
-                    className="bg-blue-200 border border-gray-300 rounded-lg py-1 px-2 focus:outline-none focus:border-blue-500"
-                    defaultValue={user.role}
-                  >
-                    <option value="admin">Admin</option>
-                    <option value="user">User</option>
-                  </select>
-                </td>
-                <td className="py-2 px-4 flex items-center space-x-2">
-                    <Link to="/admin/edit_user">
-                  <button className="flex items-center justify-center p-2 bg-blue-500 hover:bg-blue-600 text-white rounded shadow-lg focus:outline-none">
-                    <FaEdit />
-                  </button>
-                    </Link>
-                  <button className="flex items-center justify-center p-2 bg-red-500 hover:bg-red-600 text-white rounded shadow-lg focus:outline-none">
-                    <FaTrash />
-                  </button>
-                </td>
+        <div className="overflow-x-auto">
+          <table className="min-w-full bg-white border border-gray-200 divide-y divide-gray-200">
+            <thead className="bg-gray-100 text-gray-800">
+              <tr>
+                <th className="px-6 py-3 text-left text-sm font-semibold uppercase tracking-wider">Name</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold uppercase tracking-wider">Email</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold uppercase tracking-wider">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {users.map((user) => (
+                <tr key={user._id}>
+                  <td className="px-6 py-4 whitespace-nowrap">{user.fName} {user.lName}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{user.email}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex items-center space-x-3">
+                      <Link to={{
+                         pathname: '/admin/edit_user',
+                         state: { user }
+                      }}>
+                        <button className="flex items-center justify-center px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded-lg focus:outline-none">
+                          <FaEdit className="mr-1" />
+                          Edit
+                        </button>
+                      </Link>
+                      <button className="flex items-center justify-center px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded-lg focus:outline-none"
+                      onClick={()=>handleDeleteUser(user._id)}
+                      >
+                        <FaTrash className="mr-1" />
+                        Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
+  </div>
   );
 };
 
