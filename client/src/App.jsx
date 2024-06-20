@@ -13,6 +13,8 @@ import appStore from './utils/appStore.js';
 import { Provider } from 'react-redux';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import ProtectedAdmin from './components/ProtectedAdmin.jsx';
+import ErrorPage from './components/ErrorPage.jsx';
+import Counter from './components/Counter.jsx';
 
 function App() {
   return (
@@ -29,6 +31,8 @@ function App() {
           <Route path="/admin/users" element={<ProtectedAdmin><UsersList /></ProtectedAdmin>} />
           <Route path="/admin/create_user" element={<ProtectedAdmin><SignUp title={'Create User'}/></ProtectedAdmin>}/>
           <Route path="/admin/edit_user/:userId" element={<ProtectedAdmin><Edit /></ProtectedAdmin>} />
+          <Route path='/counter' element={<Counter/>}/>
+          <Route path='*' element={<ErrorPage/>} />
         </Routes>
       </Router>
     </Provider>

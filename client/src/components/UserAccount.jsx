@@ -1,4 +1,4 @@
-import { useState } from "react";
+// import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ToastContainer,toast } from 'react-toastify';
 import { confirmAlert } from 'react-confirm-alert';
@@ -7,16 +7,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { removeUser, updateProfilePhoto } from "../utils/userSlice";
 import axios from "axios";
 import { API_URL, USER_IMG_URL } from "../utils/constants";
-// import axiosInstance from "../utils/axiosInstance";
 
 const UserAccount = () => {
   const dispatch = useDispatch();
   const {user, userToken} = useSelector((state)=>state.user)
-  const [selectedFile, setSelectedFile] = useState(null);
+  // const [selectedFile, setSelectedFile] = useState(null);
 
   const handlePhotoChange = async (e) =>{
     const file = e.target.files[0];
-    setSelectedFile(file);
+    // setSelectedFile(file);
 
     try {
       const formData = new FormData();

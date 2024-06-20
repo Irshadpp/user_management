@@ -5,7 +5,8 @@ const userSlice = createSlice({
     initialState: {
         user: null,
         userToken: null,
-        isAuthenticated: false
+        isAuthenticated: false,
+        count: 0,
     },
     reducers: {
             addUser: (state, action) => {
@@ -25,9 +26,19 @@ const userSlice = createSlice({
                 if (state.user) {
                     state.user.profilePhoto = action.payload;
                 }
+            },
+            increment: (state) =>{
+                state.count = state.count + 1
+            },
+            decrement: (state) =>{
+                state.count = state.count - 1
+            },
+            clearCount: (state) =>{
+                state.count = state.count = 0;
             }
+            
     }
 });
 
-export const { addUser, updateUser, removeUser, updateProfilePhoto } = userSlice.actions;
+export const { addUser, updateUser, removeUser, updateProfilePhoto, increment, decrement, clearCount } = userSlice.actions;
 export default userSlice.reducer;
